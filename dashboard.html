@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Bin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="dash-header">
+    <h2>Smart Bin Dashboard</h2>
+    <button class="btn cancel small" onclick="logout()">Logout</button>
+</header>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h3>Bin Status</h3>
+
+        <div class="bin">
+            <div id="fillLevel"></div>
+        </div>
+
+        <p id="statusText">Checking...</p>
+
+        <button class="btn primary" id="alertBtn">Contact Garbage Collector</button>
+    </div>
+
+    <div class="card">
+        <h3>Rate the Smart Bin</h3>
+
+        <div id="ratingStars" class="stars">★★★★★</div>
+
+        <textarea id="commentBox" placeholder="Write your comment..."></textarea>
+        <button class="btn success" id="submitComment">Submit</button>
+
+        <h3>Comments</h3>
+        <ul id="commentList"></ul>
+    </div>
+
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
