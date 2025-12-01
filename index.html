@@ -3,12 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bin</title>
+    <title>Smart Bin - Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<div class="container">
     <h2>Smart Bin System</h2>
 
-    <div class="Bin">
+    <div class="card">
+        <h3>Login</h3>
+
+        <input type="text" id="loginUser" placeholder="Username">
+        <input type="password" id="loginPass" placeholder="Password">
+
+        <button class="btn primary" onclick="login()">Login</button>
+        <a class="link" href="signup.html">Create an Account</a>
+
+        <button class="btn cancel" onclick="cancelLogin()">Cancel</button>
+    </div>
+
+    <div class="card">
         <h3>Waste Input</h3>
         <label>Type of Waste:</label>
         <select id="wasteType">
@@ -16,6 +31,9 @@
             <option value="Non-Biodegradable">Non-Biodegradable</option>
             <option value="Recyclable">Recyclable</option>
         </select>
-        
+    </div>
+</div>
 
+<script src="login.js"></script>
 </body>
+</html>
