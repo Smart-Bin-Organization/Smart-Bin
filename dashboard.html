@@ -1,46 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Smart Bin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="dash-header">
-    <h2>Smart Bin Dashboard</h2>
-    <button class="btn cancel small" onclick="logout()">Logout</button>
-</header>
-
-<div class="dashboard">
-
-    <div class="card">
-        <h3>Bin Status</h3>
-
-        <div class="bin">
-            <div id="fillLevel"></div>
-        </div>
-
-        <p id="statusText">Checking...</p>
-
-        <button class="btn primary" id="alertBtn">Contact Garbage Collector</button>
+  <header class="topbar">
+    <h1>Smart Bin Dashboard</h1>
+    <div>
+      <button class="btn logout" onclick="logoutUser()">Logout</button>
     </div>
+  </header>
 
-    <div class="card">
-        <h3>Rate the Smart Bin</h3>
-
-        <div id="ratingStars" class="stars">★★★★★</div>
-
-        <textarea id="commentBox" placeholder="Write your comment..."></textarea>
-        <button class="btn success" id="submitComment">Submit</button>
-
-        <h3>Comments</h3>
-        <ul id="commentList"></ul>
+  <main class="page">
+    <div class="bins-container" id="binsContainer"></div>
+    <div id="adminPanel" style="display:none;">
+      <h2>Admin Panel</h2>
+      <button class="btn" onclick="resetAllBins()">Reset All Bins</button>
     </div>
+  </main>
 
-</div>
+  <script src="auth.js"></script>
+  <script>
+    // Check if user is logged in
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) window.location.href = "index.html";
 
-<script src="dashboard.js"></script>
+    // Show admin panel if admin
+    if (user.email === "admin@school.com") document.getElementById("adminPanel").style.display = "block";
+
+    // Sample bins (simulate multiple bins around campus)
+    let bins = JSON.parse(localStorage.getItem("bins")) || [
+      {id:1,name:"Bin A",type:"Biodegradable",level:0,comments:[],ratings:[]},
+      {id:2,name:"Bin B",type:"Non-Biodegradable",level:0,comments:[],ratings:[]},
+      {id:3,name:"Bin C",type:"Recyclable",level:0,comments:[],ratings:[]}
+    ];
+
+    function saveBins(){ localStorage.setItem("bins", JSON.stringify(bins)); }
+
+    function renderBins() {
+      const container = document.getElementById("binsContainer");
+      container.innerHTML = "";
+      bins.forEach(bin => {
+        const binDiv = document.createElement("div");
+        binDiv.className = "bin-card";
+
+        // Bin filling animation
+        const levelPercent = Math.min(bin.level,100);
+        binDiv.innerHTML = `
+          <h3>${bin.name} (${bin.type})</h3>
+          <div class="bin-fill" style="height:${levelPercent}%"></div>
+          <p>Fill Level: ${levelPercent}%</p>
+          <input type="number" id="rate${bin.id}" placeholder="Rate 1-5">
+          <button class="btn small" onclick="rateBin(${bin.id})">Submit Rating</button>
+          <input type="text" id="comment${bin.id}" placeholder="Add comment">
+          <button class="btn small" onclick="commentBin(${bin.id})">Comment</button>
+          <p>Average Rating: ${calculateAvgRating(bin.ratings)}</p>
+          <ul>${bin.comments.map(c=>`<li>${c}</li>`).join('')}</ul>
+        `;
+        container.appendChild(binDiv);
+      });
+    }
+
+    function calculateAvgRating(ratings){
+      if(ratings.length===0) return "N/A";
+      const sum = ratings.reduce((a,b)=>a+b,0);
+      return (sum/ratings.length).toFixed(1);
+    }
+
+    function rateBin(id){
+      const value = parseInt(document.getElementById("rate"+id).value);
+      if(!value || value<1 || value>5){ alert("Enter 1-5"); return; }
+      const bin = bins.find(b=>b.id===id);
+      bin.ratings.push(value);
+      saveBins(); renderBins();
+    }
+
+    function commentBin(id){
+      const text = document.getElementById("comment"+id).value.trim();
+      if(!text){ alert("Type a comment"); return; }
+      const bin = bins.find(b=>b.id===id);
+      bin.comments.push(text);
+      saveBins(); renderBins();
+    }
+
+    function resetAllBins(){
+      bins.forEach(b=>b.level=0); saveBins(); renderBins();
+    }
+
+    // Simulate random bin filling over time
+    setInterval(()=>{
+      bins.forEach(b=>{ b.level += Math.floor(Math.random()*10); if(b.level>100) b.level=100; });
+      saveBins(); renderBins();
+    },3000);
+
+    renderBins();
+  </script>
 </body>
 </html>
