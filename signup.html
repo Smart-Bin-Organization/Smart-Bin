@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Smart Bin — Sign Up</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page auth-page">
+    <main class="card center-card">
+      <h2>Create Account</h2>
+      <input id="suName" placeholder="Full Name">
+      <input id="suEmail" type="email" placeholder="Email">
+      <input id="suPass" type="password" placeholder="Password (6+ chars)">
+      <div class="row">
+        <button class="btn primary" id="signupBtn">Sign Up</button>
+        <button class="btn cancel" id="cancelSu">Cancel</button>
+      </div>
+      <p class="muted"><a href="index.html">Back to Login</a></p>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    document.getElementById("signupBtn").addEventListener("click", () => {
+      signupUser(
+        document.getElementById("suName").value,
+        document.getElementById("suEmail").value,
+        document.getElementById("suPass").value
+      );
+    });
+
+    document.getElementById("cancelSu").addEventListener("click", () => {
+      document.getElementById("suName").value = "";
+      document.getElementById("suEmail").value = "";
+      document.getElementById("suPass").value = "";
+    });
+  </script>
+</body>
+</html>

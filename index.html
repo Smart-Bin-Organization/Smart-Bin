@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bin</title>
+  <meta charset="utf-8">
+  <title>Smart Bin — Login</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <h2>Smart Bin System</h2>
+<body class="light">
+  <div class="page auth-page">
+    <header class="topbar">
+      <h1>Smart Bin System</h1>
+      <div class="right">
+        <label class="switch">
+          <input id="modeToggle" type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </header>
 
-    <div class="Bin">
-        <h3>Waste Input</h3>
-        <label>Type of Waste:</label>
-        <select id="wasteType">
-            <option value="Biodegradable">Biodegradable</option>
-            <option value="Non-Biodegradable">Non-Biodegradable</option>
-            <option value="Recyclable">Recyclable</option>
-        </select>
-        
+    <main class="card center-card">
+      <h2>Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email">
+      <input id="loginPass" type="password" placeholder="Password">
+      <div class="row">
+        <button class="btn primary" id="loginBtn">Login</button>
+        <button class="btn cancel" id="cancelLogin">Cancel</button>
+      </div>
+      <p class="muted">
+        Don't have an account? <a href="signup.html">Sign up</a>
+      </p>
+    </main>
+  </div>
 
+  <script src="auth.js"></script>
+  <script>
+    // Dark mode toggle
+    const modeToggle = document.getElementById("modeToggle");
+    const setMode = m => {
+      document.body.className = m;
+      localStorage.setItem("theme", m);
+      modeToggle.checked = m === "dark";
+    };
+    setMode(localStorage.getItem("theme") || "light");
+    modeToggle.addEventListener("change", () => setMode(modeToggle.checked ? "dark" : "light"));
+
+    // Login
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      loginUser(document.getElementById("loginEmail").value, document.getElementById("loginPass").value);
+    });
+    document.getElementById("cancelLogin").addEventListener("click", () => {
+      document.getElementById("loginEmail").value = "";
+      document.getElementById("loginPass").value = "";
+    });
+  </script>
 </body>
+</html>
